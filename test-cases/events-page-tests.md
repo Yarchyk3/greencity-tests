@@ -1,11 +1,7 @@
 #  Test Cases: GreenCity Events Page
-
-##  Page under test
-
 https://www.greencity.cx.ua/#/greenCity/events
 
-## 1: Verify Events Page Loads Successfully
-
+## TC-01: Page load
 User has a stable internet connection and an open web browser.
 
 | Step | Action                   | Data                                           | Expected Result                                |
@@ -16,7 +12,7 @@ User has a stable internet connection and an open web browser.
 
 ---
 
-## 2: Verify Event Cards Display Correct Information
+## TC-02: Event cards
 
 User is on the GreenCity events page.
 
@@ -29,7 +25,7 @@ User is on the GreenCity events page.
 
 ---
 
-## 3: Verify Navigation to Event Details Page
+## TC-03: Navigation
 
 User is on the GreenCity events page with visible event cards.
 
@@ -40,7 +36,7 @@ User is on the GreenCity events page with visible event cards.
 
 ---
 
-## 4: Verify Behavior with Incorrect URL 
+## TC-04: Negative test 
 
 User has an open web browser.
 

@@ -1,43 +1,58 @@
-# Test Cases
+#  Test Cases: GreenCity Events Page
 
-## TC-01: Verify Events Page Loads
+##  Page under test
+
+https://www.greencity.cx.ua/#/greenCity/events
+
+## 1: Verify Events Page Loads Successfully
 
 **Preconditions:**
 
-* Internet connection
-* Browser is open
+* User has a stable internet connection
+* Browser is opened
 
-| Step | Action           | Data                                           | Expected Result      |
-| ---- | ---------------- | ---------------------------------------------- | -------------------- |
-| 1    | Open browser     | Chrome                                         | Browser opens        |
-| 2    | Enter URL        | https://www.greencity.cx.ua/#/greenCity/events | Page loads           |
-| 3    | Wait for loading | —                                              | Events are displayed |
+| Step | Action                   | Data                                           | Expected Result                                |
+| ---- | ------------------------ | ---------------------------------------------- | ---------------------------------------------- |
+| 1    | Open browser             | Chrome                                         | Browser opens successfully                     |
+| 2    | Enter URL in address bar | https://www.greencity.cx.ua/#/greenCity/events | Page starts loading                            |
+| 3    | Wait for page to load    | —                                              | Events page is displayed with a list of events |
 
 ---
 
-## TC-02: Verify Event Cards Display
+## 2: Verify Event Cards Display Correct Information
 
 **Preconditions:**
 
-* User is on events page
+* User is on the Events page
 
-| Step | Action            | Data | Expected Result          |
-| ---- | ----------------- | ---- | ------------------------ |
-| 1    | Observe cards     | —    | Cards are visible        |
-| 2    | Check title       | —    | Title is displayed       |
-| 3    | Check date        | —    | Date is displayed        |
-| 4    | Check description | —    | Description is displayed |
+| Step | Action                  | Data | Expected Result                                     |
+| ---- | ----------------------- | ---- | --------------------------------------------------- |
+| 1    | Observe event cards     | —    | Event cards are visible on the page                 |
+| 2    | Check event title       | —    | Each card contains a visible event title            |
+| 3    | Check event date        | —    | Each card displays a valid event date               |
+| 4    | Check event description | —    | Each card contains a short description of the event |
 
 ---
 
-## TC-03: Verify Navigation to Event Details
+## 3: Verify Navigation to Event Details Page
 
 **Preconditions:**
 
-* User is on events page
+* User is on the Events page
 
-| Step | Action         | Data | Expected Result            |
-| ---- | -------------- | ---- | -------------------------- |
-| 1    | Click on event | —    | Event page opens           |
-| 2    | Check content  | —    | Detailed info is displayed |
+| Step | Action                  | Data | Expected Result                                            |
+| ---- | ----------------------- | ---- | ---------------------------------------------------------- |
+| 1    | Click on any event card | —    | User is redirected to the event details page               |
+| 2    | Observe event details   | —    | Detailed information about the selected event is displayed |
 
+---
+
+## 4: Verify Behavior with Incorrect URL 
+
+**Preconditions:**
+
+* Browser is opened
+
+| Step | Action                             | Data                                  | Expected Result                                     |
+| ---- | ---------------------------------- | ------------------------------------- | --------------------------------------------------- |
+| 1    | Enter incorrect URL in address bar | https://www.greencity.cx.ua/wrongpage | Error page or “Page not found” message is displayed |

@@ -6,10 +6,7 @@ https://www.greencity.cx.ua/#/greenCity/events
 
 ## 1: Verify Events Page Loads Successfully
 
-**Preconditions:**
-
-* User has a stable internet connection
-* Browser is opened
+User has a stable internet connection and an open web browser.
 
 | Step | Action                   | Data                                           | Expected Result                                |
 | ---- | ------------------------ | ---------------------------------------------- | ---------------------------------------------- |
@@ -21,9 +18,7 @@ https://www.greencity.cx.ua/#/greenCity/events
 
 ## 2: Verify Event Cards Display Correct Information
 
-**Preconditions:**
-
-* User is on the Events page
+User is on the GreenCity events page.
 
 | Step | Action                  | Data | Expected Result                                     |
 | ---- | ----------------------- | ---- | --------------------------------------------------- |
@@ -36,9 +31,7 @@ https://www.greencity.cx.ua/#/greenCity/events
 
 ## 3: Verify Navigation to Event Details Page
 
-**Preconditions:**
-
-* User is on the Events page
+User is on the GreenCity events page with visible event cards.
 
 | Step | Action                  | Data | Expected Result                                            |
 | ---- | ----------------------- | ---- | ---------------------------------------------------------- |
@@ -49,9 +42,7 @@ https://www.greencity.cx.ua/#/greenCity/events
 
 ## 4: Verify Behavior with Incorrect URL 
 
-**Preconditions:**
-
-* Browser is opened
+User has an open web browser.
 
 | Step | Action                             | Data                                  | Expected Result                                     |
 | ---- | ---------------------------------- | ------------------------------------- | --------------------------------------------------- |

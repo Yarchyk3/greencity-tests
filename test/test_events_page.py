@@ -1,15 +1,11 @@
-import unittest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
-class TestEventsPage(unittest.TestCase):
-    
-    def setUp(self):
-        # Створюємо драйвер Chrome
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
+options = Options()
+options.add_argument("--headless")  # без GUI
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+
+self.driver = webdriver.Chrome(options=options)
         self.driver.get("https://www.greencity.cx.ua/#/greenCity/events") 
         
         # Створюємо WebDriverWait

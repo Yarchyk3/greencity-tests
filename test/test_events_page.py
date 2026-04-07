@@ -1,57 +1,56 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from selenium.webdriver.chrome.options import Options
-
-def setUp(self):
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-
-    self.driver = webdriver.Chrome(options=options)
-    self.driver.maximize_window()
-    self.driver.get("https://www.greencity.cx.ua/#/greenCity/events")
-    self.wait = WebDriverWait(self.driver, 10)
 class TestEventsPage(unittest.TestCase):
-
+    
+    def setUp(self):
+        # Створюємо драйвер Chrome
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+        self.driver.get("https://www.greencity.cx.ua/#/greenCity/events") 
+        
+        # Створюємо WebDriverWait
+        self.wait = WebDriverWait(self.driver, 10)
+    
     def tearDown(self):
-        self.driver.quit()
-
-    # TC-01: Page loads
+        # Закриваємо браузер після тесту
+        if hasattr(self, 'driver') and self.driver:
+            self.driver.quit()
+    
     def test_page_loads(self):
-        events = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+        # Чекаємо, поки завантажиться головний елемент сторінки
+        main_element = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".events-container"))
         )
-        self.assertTrue(len(events) > 0, "Events are not displayed")
-
-    # TC-02: Event cards content
+        self.assertIsNotNone(main_element)
+    
     def test_event_cards_content(self):
+        # Чекаємо, поки з'являться всі картки подій
         cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".event-card"))
         )
-
-        first_card_text = cards[0].text
-        self.assertTrue(len(first_card_text) > 0, "Event card is empty")
-
-    # TC-03: Navigation to event details
+        self.assertGreater(len(cards), 0)
+        
+        # Перевіряємо, що в кожній картці є заголовок
+        for card in cards:
+            title = card.find_element(By.CSS_SELECTOR, ".event-title")
+            self.assertTrue(title.text.strip() != "")
+    
     def test_navigation_to_event(self):
+        # Чекаємо появи карток та клікаємо на першу
         cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".event-card"))
         )
-
         cards[0].click()
-
-        self.wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "app-event-detail"))
+        
+        # Перевіряємо, що відкрилася сторінка події
+        event_header = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".event-header"))
         )
-
-        self.assertIn("event", self.driver.current_url.lower())
-
+        self.assertIsNotNone(event_header)
 
 if __name__ == "__main__":
     unittest.main()

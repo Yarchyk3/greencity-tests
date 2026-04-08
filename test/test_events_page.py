@@ -1,5 +1,6 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,9 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 class TestGreenCityEvents(unittest.TestCase):
 
     def setUp(self):
-        """Preconditions: Відкриття браузера перед кожним тестом"""
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
+        """Preconditions: Відкриття браузера перед кожним тестом у Headless режимі"""
+        chrome_options = Options()
+        chrome_options.add_argument("--headless") # Запуск без графічного інтерфейсу
+        chrome_options.add_argument("--no-sandbox") # Потрібно для роботи в Linux/контейнерах
+        chrome_options.add_argument("--disable-dev-shm-usage") # Вирішує проблему з обмеженою пам'яттю
+        chrome_options.add_argument("--window-size=1920,1080") # Віртуальний розмір екрану
+
+        # Передаємо опції у драйвер
+        self.driver = webdriver.Chrome(options=chrome_options)
+        
         self.wait = WebDriverWait(self.driver, 15)
         self.base_url = "https://www.greencity.cx.ua/#/greenCity/events"
 
@@ -20,10 +28,8 @@ class TestGreenCityEvents(unittest.TestCase):
 
     def test_tc01_page_load(self):
         """TC-01: Page load - Перевірка успішного завантаження сторінки"""
-        # Крок 2: Введення URL
         self.driver.get(self.base_url)
         
-        # Крок 3: Очікування завантаження списку подій
         events_list = self.wait.until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".list-container, app-events-list"))
         )
@@ -35,13 +41,11 @@ class TestGreenCityEvents(unittest.TestCase):
         """TC-02: Event cards - Перевірка вмісту карток подій"""
         self.driver.get(self.base_url)
         
-        # Крок 1: Очікування появи карток
         cards = self.wait.until(
             EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".list-item, mat-card"))
         )
         self.assertGreater(len(cards), 0, "Картки подій не знайдені")
 
-        # Крок 2-4: Перевірка першої картки на наявність заголовку, дати та опису
         first_card = cards[0]
         
         title = first_card.find_element(By.CSS_SELECTOR, ".title-list, .event-title").text
@@ -56,16 +60,13 @@ class TestGreenCityEvents(unittest.TestCase):
         """TC-03: Navigation - Перехід на сторінку деталей події"""
         self.driver.get(self.base_url)
         
-        # Крок 1: Клік на першу картку події
         first_card_link = self.wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".list-item, mat-card"))
         )
         first_card_link.click()
         
-        # Крок 2: Перевірка, що URL змінився (містить ID події або шлях деталізації)
         self.wait.until(EC.url_contains("events/"))
         
-        # Перевірка наявності детальної інформації
         details_container = self.wait.until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, ".event-main-image, .event-text"))
         )
@@ -76,8 +77,6 @@ class TestGreenCityEvents(unittest.TestCase):
         wrong_url = "https://www.greencity.cx.ua/#/wrongpage"
         self.driver.get(wrong_url)
         
-        # Очікуємо повідомлення про помилку або 404 сторінку (залежить від логіки сайту)
-        # На GreenCity зазвичай відображається кастомна сторінка 404
         error_message = self.wait.until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".error-code, .not-found-container, h1"))
         )

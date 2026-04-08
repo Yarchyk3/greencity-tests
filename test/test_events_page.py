@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-<<<<<<< HEAD
+
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -103,7 +103,7 @@ class TestEventsPage(unittest.TestCase):
         )
 
         self.assertIn("event", self.driver.current_url.lower())
->>>>>>> b4a8ea8 (new file:   .gitignore)
+
 
 
 if __name__ == "__main__":

@@ -4,107 +4,90 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-
-
-class TestGreenCityEvents(unittest.TestCase):
-
-    def setUp(self):
-        chrome_options = Options()
-
-        
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--window-size=1920,1080")
-
-        self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
-            options=chrome_options
-        )
-
-        self.wait = WebDriverWait(self.driver, 15)
-        self.driver.get("https://www.greencity.cx.ua/#/greenCity/events")
-
-    def tearDown(self):
-        if hasattr(self, 'driver'):
-            self.driver.quit()
-
-    #  TC-01: Page load
-    def test_tc01_page_load(self):
-        cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
-        )
-        self.assertGreater(len(cards), 0)
-
-    #  TC-02: Event cards
-    def test_tc02_event_cards(self):
-        cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
-        )
-
-        self.assertGreater(len(cards), 0)
-
-        for card in cards:
-            self.assertTrue(card.is_displayed())
-            self.assertTrue(len(card.text.strip()) > 0)
-
-    #  TC-03: Navigation
-    def test_tc03_navigation(self):
-        cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
-        )
-
-        cards[0].click()
-
-        self.wait.until(EC.url_contains("event"))
-        self.assertIn("event", self.driver.current_url)
-
-    # ✅TC-04: Negative test
-    def test_tc04_negative_wrong_url(self):
-        self.driver.get("https://www.greencity.cx.ua/wrongpage")
-        self.assertNotIn("greenCity/events", self.driver.current_url)
-
-
-
 class TestEventsPage(unittest.TestCase):
+    BASE_URL = "https://www.greencity.cx.ua/#/greenCity/events"
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
-        self.driver.get("https://www.greencity.cx.ua/#/greenCity/events")
+        """Preconditions: Відкриття браузера перед кожним тестом"""
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized") 
+        
+        self.driver = webdriver.Chrome(options=options)
+        
         self.wait = WebDriverWait(self.driver, 10)
 
     def tearDown(self):
-        self.driver.quit()
+        """Postconditions: Закриття браузера після кожного тесту"""
+        if self.driver:
+            self.driver.quit()
 
-    def test_page_loads(self):
-        events = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+    def test_tc01_page_load(self):
+        """TC-01: Page load - Перевірка завантаження сторінки подій"""
+        # Крок 1-2: Переходимо за лінком
+        self.driver.get(self.BASE_URL)
+        
+        
+        events_container = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "app-events-list, .list-container"))
         )
-        self.assertTrue(len(events) > 0)
+        self.assertTrue(events_container.is_displayed(), "Сторінка подій не відображається")
 
-    def test_event_cards_content(self):
+    def test_tc02_event_cards(self):
+        """TC-02: Event cards - Перевірка наявності даних у картках"""
+        self.driver.get(self.BASE_URL)
+        
+        
         cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-events-list-item"))
         )
-        self.assertTrue(len(cards[0].text) > 0)
+        self.assertGreater(len(cards), 0, "Картки подій не знайдені на сторінці")
 
-    def test_navigation_to_event(self):
-        cards = self.wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "app-event-card"))
+        
+        first_card = cards[0]
+        
+        # Крок 2: Перевірка заголовку
+        title = first_card.find_element(By.CSS_SELECTOR, ".title-list, .event-title, .title, h2").text
+        self.assertTrue(len(title) > 0, "Заголовок події порожній")
+        
+        
+        date = first_card.find_element(By.CSS_SELECTOR, ".date-data, .event-date, .date").text
+        self.assertTrue(len(date) > 0, "Дата події порожня")
+        
+        
+        description = first_card.find_element(By.CSS_SELECTOR, ".description, .event-description, p").text
+        self.assertTrue(len(description) > 0, "Опис події порожній")
+
+    def test_tc03_navigation(self):
+        """TC-03: Navigation - Перехід на сторінку деталей через кнопку 'More'"""
+        self.driver.get(self.BASE_URL)
+        
+      
+        first_card = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "app-events-list-item"))
         )
-        cards[0].click()
+        
+        
+        more_button = first_card.find_element(By.CSS_SELECTOR, "button.secondary-global-button")
+        self.driver.execute_script("arguments[0].click();", more_button)
+        
+        
+        self.wait.until(lambda driver: driver.current_url != self.BASE_URL)
+        
+        
+        current_url = self.driver.current_url
+        self.assertTrue("events/" in current_url, f"Редирект не відбувся! Поточний URL: {current_url}")
 
-        self.wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "app-event-detail"))
+    def test_tc04_negative_test(self):
+        """TC-04: Negative test - Введення некоректного URL"""
+            wrong_url = "https://www.greencity.cx.ua/#/wrongpage"
+        self.driver.get(wrong_url)
+        
+        
+        error_message = self.wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "h1, .error-code, .not-found-container"))
         )
-
-        self.assertIn("event", self.driver.current_url.lower())
-
-
+        
+        self.assertTrue(error_message.is_displayed(), "Повідомлення про помилку (Page not found) не відобразилось")
 
 if __name__ == "__main__":
     unittest.main()

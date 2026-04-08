@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 selenium
 webdriver-manager
+=======
+selenium
+>>>>>>> b4a8ea8 (new file:   .gitignore)

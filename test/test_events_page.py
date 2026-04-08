@@ -66,7 +66,7 @@ class TestGreenCityEvents(unittest.TestCase):
     def test_tc04_negative_wrong_url(self):
         self.driver.get("https://www.greencity.cx.ua/wrongpage")
         self.assertNotIn("greenCity/events", self.driver.current_url)
-=======
+
 
 
 class TestEventsPage(unittest.TestCase):

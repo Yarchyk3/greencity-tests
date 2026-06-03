@@ -18,13 +18,15 @@ export default defineConfig({
       },
     ],
   ],
-  use: {
+ use: {
     baseURL: 'https://www.greencity.cx.ua/#/greenCity',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     headless: true,
+    viewport: { width: 1440, height: 900 },
   },
+  
   projects: [
     {
       name: 'chromium',

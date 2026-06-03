@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GreenCity Playwright Test Automation
 
 > 📊 **Allure Report (GitHub Pages):** `https://<your-username>.github.io/<your-repo-name>/`  
@@ -156,3 +157,12 @@ The pipeline runs automatically on every `push` or `pull_request` to `main`/`mas
 | TC-08 | Preview mode displays entered data correctly |
 | TC-09 | Edit News button visible only to the author |
 | TC-10 | Author can edit news; changes saved, creation date preserved |
+=======
+GreenCity Tests
+Description
+Test cases for GreenCity events page.
+Tested Page
+https://www.greencity.cx.ua/#/greenCity/events
+Author
+Yarchyk3
+>>>>>>> d503db65e0fd33b4ffbf0844af469c54895178dc

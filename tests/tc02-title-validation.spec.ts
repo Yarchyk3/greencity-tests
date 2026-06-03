@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { allure } from 'allure-playwright';
+
 import { NewsPage } from '../pages/news.page';
 import { CreateNewsPage } from '../pages/create-news.page';
 import { loginUser } from '../utils/helpers';

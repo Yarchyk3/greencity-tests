@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Page } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
 import { NewsPage } from '../pages/news.page';
